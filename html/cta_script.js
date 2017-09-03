@@ -4,7 +4,7 @@ var gravity = 9.8;
 var score = 0;
 var ache = 3;
 var acheText = ['', 'I can\'t take anymore!', 'Rumbling Tummy', 'Feeling Great!' ];
-var screen = 'game';
+var screen = 'start';
 var drop = false;
 
 var fart1 = document.getElementById('fart1');
@@ -24,7 +24,7 @@ function GamePiece(imageName, x, y, dx, dy, speed){
     };
 
     this.updateFall = function () {
-        this.dy += (Math.pow(gravity, 2) * 0.001 * Math.random());
+        this.dy += (Math.pow(gravity, 2) * 0.0005 * Math.random());
         this.dx += 0;
         this.y += this.dy;
         this.x += this.dx;
@@ -152,6 +152,39 @@ function UI(x, y, dx, dy, width, height){
     };
 
 
+    this.drawStartMenu = function () {
+        c.fillStyle = "rgba(250,250,250,0.9";
+        this.image = c.fillRect(this.x, this.y, this.width, this.height);
+        c.strokeStyle = "rgba(20,20,20,0.9";
+        c.lineWidth   = 5;
+        c.strokeRect(this.x, this.y, this.width, this.height);
+        c.fillStyle = "rgba(20,20,20,1";
+        c.textAlign = 'center';
+        c.font = "bold 46px Verdana";
+        c.fillText("Chase's Trash Adventure", window.innerWidth/2 , this.y + (0.15 * this.height));
+        c.fillStyle = '#e12417';
+        c.font = "bold 36px Verdana";
+        c.fillText("Click anywhere to play!", window.innerWidth/2 , this.y + this.height - 28);
+
+    };
+
+    this.drawInstruct = function () {
+        c.fillStyle = "rgba(250,250,250,0.9";
+        this.image = c.fillRect(this.x, this.y, this.width, this.height);
+        c.strokeStyle = "rgba(20,20,20,0.9";
+        c.lineWidth   = 5;
+        c.strokeRect(this.x, this.y, this.width, this.height);
+        c.fillStyle = "rgba(20,20,20,1";
+        c.textAlign = 'center';
+        c.font = "bold 46px Verdana";
+        c.fillText("Controls", window.innerWidth/2 , this.y + (0.15 * this.height));
+        c.fillStyle = '#e12417';
+        c.font = "bold 36px Verdana";
+        c.fillText("OK, Got It!", window.innerWidth/2 , this.y + this.height - 28);
+
+    };
+
+
 
     this.fall = function () {
         this.dy += (Math.pow(20, 2) * 0.001 * Math.random());
@@ -163,7 +196,9 @@ function UI(x, y, dx, dy, width, height){
         }
         if(screen === 'tampon'){
             endGame.drawStomachAcheScreen('You ate a tampon... Gross!!')
-
+        }
+        if (screen === 'start'){
+            start.drawStartMenu();
         }
 
     };
@@ -196,8 +231,9 @@ var speedup = new GamePiece('speedup2.png', -100, 0, 0, 0, 0);
 var warn = new GamePiece('warn2.png', -100, 0, 0, 0, 0);
 var yum = new GamePiece('yum3.png', -100, 0, 0, 0, 0);
 
-var scoreCard = new UI(-(window.innerWidth * 0.27), window.innerHeight * .015, 0, 0, window.innerWidth * 0.26, window.innerHeight * 0.15);
+var scoreCard = new UI(-(window.innerWidth * 0.3), window.innerHeight * .015, 0, 0, window.innerWidth * 0.29, window.innerHeight * 0.15);
 var endGame = new UI(100, 100, 0, 0, window.innerWidth - 200, window.innerHeight - 200);
+var start = new UI(100, 100, 0, 0, window.innerWidth - 200, window.innerHeight - 200);
 
 
 
@@ -233,7 +269,7 @@ function caughtObject(object){
     if(object===coffee){
         var slurp = document.getElementById('slurp');
         slurp.play();
-        chase.speed +=1;
+        chase.speed += 0.5;
         speedup.x = object.x;
         speedup.y = window.innerHeight - (chase.image.height);
         speedup.dx = (Math.random() - 0.5) * 7;
@@ -300,8 +336,7 @@ function restart(){
     yum = new GamePiece('yum3.png', -100, 0, 0, 0, 0);
     scoreCard = new UI(-(window.innerWidth * 0.26), window.innerHeight * .015, 0, 0, window.innerWidth * 0.25, window.innerHeight * 0.15);
     endGame = new UI(100, 100, 0, 0, window.innerWidth - 200, window.innerHeight - 200);
-
-
+    start = new UI(100, 100, 0, 0, window.innerWidth - 200, window.innerHeight - 200);
 }
 
 
@@ -313,65 +348,134 @@ window.addEventListener('resize', function () {
     restart();
 });
 
-window.addEventListener('keydown', function (event) {
 
-    if(event.keyCode === 37){
-        chase.dx = -chase.speed;
-    }
-    else if(event.keyCode === 39){
-        chase.dx = chase.speed;
-    }
-    else {
-        chase.dx = 0;
-    }
-
-});
-
-window.addEventListener('keyup', function (event) {
-
-    if (event.keyCode === 39 && chase.dx < 0)
-        chase.dx = -chase.speed;
-    if (event.keyCode === 39 && chase.dx > 0)
-        chase.dx = 0;
-    if (event.keyCode === 37 && chase.dx < 0)
-        chase.dx = 0;
-    if (event.keyCode === 37 && chase.dx > 0)
-        chase.dx = chase.speed
-
-});
-
-
-window.addEventListener('touchstart', function (e) {
-    e.preventDefault();
-    var x = e.touches[0].pageX;
-
-    if(x < window.innerWidth/2){
-        chase.dx = -chase.speed;
-    }
-    else if(x > window.innerWidth/2){
-        chase.dx = chase.speed;
-    }
-    else {
-        chase.dx = 0;
-    }
-
-    window.addEventListener('touchend', function (e) {
-        e.preventDefault();
-        if (x > window.innerWidth/2 && chase.dx === chase.speed)
-            chase.dx = 0;
-        if (x < window.innerWidth/2 && chase.dx === -chase.speed)
-            chase.dx = 0;
-    })
-
-});
 
 
 //////////////////////////////Game Loop/////////////////////////////////////
 
+function startMenu() {
+
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        window.addEventListener('touchstart', function () {
+            start.dy = -3;
+            drop = true;
+        });
+    }
+    else{
+        window.addEventListener('click', function (e) {
+            e.preventDefault();
+            start.dy = -3;
+            drop = true;
+        });
+    }
+
+
+    requestAnimationFrame(startMenu);
+
+    if (screen === 'start'){
+        c.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        if (drop === false){
+            start.drawStartMenu();
+        }
+        if (drop === true){
+            start.fall();
+        }
+        if (start.y > window.innerHeight * 1.5){
+            restart();
+            gameLoop();
+        }
+    }
+
+
+
+    if(screen === 'instructions'){
+        c.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        if (drop === false){
+            endGame.drawStomachAcheScreen('You have eaten too much chocolate!')
+        }
+        if (drop === true){
+            endGame.fall();
+        }
+        if (endGame.y > window.innerHeight * 1.5){
+            restart();
+            gameLoop();
+        }
+    }
+
+}
 
 function gameLoop() {
-    create();
+
     if (screen === 'game'){
+
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            window.addEventListener('touchstart', function (e) {
+                e.preventDefault();
+                var x = e.changedTouches[0].pageX;
+
+                if(x < window.innerWidth/2){
+                    chase.dx = -chase.speed;
+
+                }
+                else if(x > window.innerWidth/2){
+                    chase.dx = chase.speed;
+
+                }
+                else {
+                    chase.dx = 0;
+                }
+            });
+
+
+            window.addEventListener('touchend', function (e) {
+                e.preventDefault();
+                var x = e.changedTouches[0].pageX;
+
+
+                if (x > window.innerWidth/2 && chase.dx === chase.speed) //Touch Right
+                    chase.dx = 0;
+                if (x < window.innerWidth/2 && chase.dx === -chase.speed) //Touch Left
+                    chase.dx = 0;
+                if (x < window.innerWidth/2 && chase.dx && chase.dx > 0) //Touch Left, Moving Right
+                    chase.dx = chase.speed;
+                if (x < window.innerWidth/2 && chase.dx && chase.dx < 0) //Touch Right, Moving Left
+                    chase.dx = -chase.speed;
+            });
+        }
+        else{
+            window.addEventListener('keydown', function (event) {
+
+                if(event.keyCode === 37){
+                    chase.dx = -chase.speed;
+                }
+                else if(event.keyCode === 39){
+                    chase.dx = chase.speed;
+                }
+                else {
+                    chase.dx = 0;
+                }
+
+            });
+
+            window.addEventListener('keyup', function (event) {
+
+                if (event.keyCode === 39 && chase.dx < 0)
+                    chase.dx = -chase.speed;
+                if (event.keyCode === 39 && chase.dx > 0)
+                    chase.dx = 0;
+                if (event.keyCode === 37 && chase.dx < 0)
+                    chase.dx = 0;
+                if (event.keyCode === 37 && chase.dx > 0)
+                    chase.dx = chase.speed
+            });
+        }
+
+
+
+
+
+
+
         requestAnimationFrame(gameLoop);
         c.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
@@ -399,28 +503,28 @@ function gameLoop() {
 }
 
 function tooMuchChocolate(){
-    window.addEventListener('click', function () {
-        endGame.dy = -3;
-        drop = true;
 
-    });
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        window.addEventListener('touchstart', function () {
+            endGame.dy = -3;
+            drop = true;
+        });
+    }
+    else{
+        window.addEventListener('click', function (e) {
+            e.preventDefault();
+            endGame.dy = -3;
+            drop = true;
+        });
+    }
 
-    window.addEventListener('touchstart', function (e) {
-        e.preventDefault();
-        if (!e){
-            e = event;
-        }
-        e.preventDefault();
-        endGame.dy = -3;
-        drop = true;
 
-    });
 
     if (screen === 'tampon'){
         requestAnimationFrame(tooMuchChocolate);
         c.clearRect(0, 0, window.innerWidth, window.innerHeight);
         if (drop === false){
-            endGame.drawStomachAcheScreen('You ate a tampon.... like, Seriously!?')
+            endGame.drawStomachAcheScreen('You ate a tampon.... Gross!')
         }
         if (drop === true){
             endGame.fall();
@@ -450,8 +554,8 @@ function tooMuchChocolate(){
 }
 
 ////////////////////////////////Called Functions///////////////////////////////////////////
-
-window.onload = gameLoop();
+window.onload = create();
+window.onload = startMenu();
 
 
 
