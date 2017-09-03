@@ -218,7 +218,7 @@ function toTop(object, height) {
     object.y = height;
     object.x = (Math.random() * (innerWidth - object.image.width / 2)) - object.image.width / 2;
     object.dy = 0;
-    object.dx = (Math.random() - 0.5) * 3;
+    object.dx = (Math.random() - 0.5) * 1.5;
 }
 
 // Calls toTop() if something falls past the bottom of the screen
@@ -354,60 +354,16 @@ window.addEventListener('touchstart', function (e) {
     else {
         chase.dx = 0;
     }
-});
 
-window.addEventListener('touchmove', function (e) {
-    e.preventDefault();
-    var x = e.touches[0].pageX;
-    window.addEventListener('touchend', function () {
-        if (x > window.innerWidth/2 && chase.dx < 0)
-            chase.dx = -chase.speed;
-        if (x > window.innerWidth/2 && chase.dx > 0)
+    window.addEventListener('touchend', function (e) {
+        e.preventDefault();
+        if (x > window.innerWidth/2 && chase.dx === chase.speed)
             chase.dx = 0;
-        if (x < window.innerWidth/2 && chase.dx < 0)
+        if (x < window.innerWidth/2 && chase.dx === -chase.speed)
             chase.dx = 0;
-        if (x < window.innerWidth/2 && chase.dx > 0)
-            chase.dx = chase.speed
     })
-});
-
-
-
-/*
-
-window.addEventListener('mousedown', function (event) {
-    var x = event.pageX;
-    var y = event.pageY;
-
-    if(x < window.innerWidth/2){
-        chase.dx = -chase.speed;
-    }
-    else if(x > window.innerWidth/2){
-        chase.dx = chase.speed;
-    }
-    else {
-        chase.dx = 0;
-    }
 
 });
-
-window.addEventListener('mouseup', function (event) {
-    var x = event.pageX;
-    var y = event.pageY;
-
-    if (x > window.innerWidth/2 && chase.dx < 0)
-        chase.dx = -chase.speed;
-    if (x > window.innerWidth/2 && chase.dx > 0)
-        chase.dx = 0;
-    if (x < window.innerWidth/2 && chase.dx < 0)
-        chase.dx = 0;
-    if (x < window.innerWidth/2 && chase.dx > 0)
-        chase.dx = chase.speed
-
-});
-
-*/
-
 
 
 //////////////////////////////Game Loop/////////////////////////////////////
@@ -450,6 +406,7 @@ function tooMuchChocolate(){
     });
 
     window.addEventListener('touchstart', function (e) {
+        e.preventDefault();
         if (!e){
             e = event;
         }
