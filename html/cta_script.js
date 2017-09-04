@@ -6,6 +6,7 @@ var ache = 3;
 var acheText = ['', 'I can\'t take anymore!', 'Rumbling Tummy', 'Feeling Great!' ];
 var screen = 'start';
 var drop = false;
+var instructions = false;
 
 var fart1 = document.getElementById('fart1');
 /////////////////////////////Object////////////////////////////////////
@@ -40,14 +41,13 @@ function GamePiece(imageName, x, y, dx, dy, speed){
     };
 
     this.updateGround = function () {
-        if(this.x < -55 ){
+        if(this.x < -75 ){
             this.x += this.speed;
             this.draw()
         }
-        else if(this.x > window.innerWidth - 150){
+        else if(this.x > window.innerWidth - 140){
             this.x -= this.speed;
             this.draw()
-
         }
         else{
             this.y += this.dy;
@@ -70,8 +70,8 @@ function UI(x, y, dx, dy, width, height){
         c.textAlign = 'left';
         c.fillStyle = "rgba(250,250,250,0.5";
         this.image = c.fillRect(this.x, this.y, this.width, this.height);
-        c.strokeStyle = "rgba(20,20,20,0.7";
-        c.lineWidth   = 5;
+        c.strokeStyle = "rgba(255,255,255,0.9";
+        c.lineWidth   = 2;
         c.strokeRect(this.x, this.y, this.width, this.height);
         c.fillStyle = "rgba(250,250,250,1";
         c.shadowColor = '#1e1e1e';
@@ -153,26 +153,91 @@ function UI(x, y, dx, dy, width, height){
 
 
     this.drawStartMenu = function () {
-        c.fillStyle = "rgba(250,250,250,0.9";
-        this.image = c.fillRect(this.x, this.y, this.width, this.height);
-        c.strokeStyle = "rgba(20,20,20,0.9";
-        c.lineWidth   = 5;
-        c.strokeRect(this.x, this.y, this.width, this.height);
-        c.fillStyle = '#1a2537';
-        c.textAlign = 'center';
-        c.font = "bold 70px Verdana";
-        if(window.innerHeight > window.innerWidth){
-            c.fillText("Rotate Your", window.innerWidth/2 , this.y + (0.45 * this.height));
-            c.fillText("Phone Sideways!", window.innerWidth/2 , this.y + (0.45 * this.height) + 85);
+        if (instructions === false){
+            c.fillStyle = "rgba(250,250,250,0.9";
+            this.image = c.fillRect(this.x, this.y, this.width, this.height);
+            c.strokeStyle = "rgba(20,20,20,0.9";
+            c.lineWidth   = 5;
+            c.strokeRect(this.x, this.y, this.width, this.height);
+            c.fillStyle = '#1a2537';
+            c.textAlign = 'center';
+            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                c.font = "bold 70px Verdana";
+                if(window.innerHeight > window.innerWidth){
+                    c.fillText("Rotate Your", window.innerWidth/2 , this.y + (0.45 * this.height));
+                    c.fillText("Phone Sideways!", window.innerWidth/2 , this.y + (0.45 * this.height) + 85);
+                }
+                else{
+                    c.font = "bold 45px Verdana";
+                    c.fillText("Chase's Trash Adventure", window.innerWidth/2 , this.y + (0.15 * this.height));
+                    chase.x = window.innerWidth/2 - chase.image.width/2; chase.y = window.innerHeight/2 - chase.image.height/2; chase.draw();
+                    c.fillStyle = '#e12417';
+                    c.font = "bold 36px Verdana";
+                    c.fillText("Click anywhere to play!", window.innerWidth/2 , this.y + (0.85 * this.height));
+                }
+            }
+            else if (window.innerWidth < 945 || window.innerHeight < 550){
+                c.font = "bold 65px Verdana";
+                c.fillText("Enlarge", window.innerWidth/2 , this.y + (0.45 * this.height));
+                c.fillText("Your Screen!", window.innerWidth/2 , this.y + (0.45 * this.height) + 85);
+            }
+            else{
+                c.font = "bold 45px Verdana";
+                c.fillText("Chase's Trash Adventure", window.innerWidth/2 , this.y + (0.15 * this.height));
+                chase.x = window.innerWidth/2 - chase.image.width/2; chase.y = window.innerHeight/2 - chase.image.height/2; chase.draw();
+                c.fillStyle = '#e12417';
+                c.font = "bold 36px Verdana";
+                c.fillText("Click anywhere to play!", window.innerWidth/2 , this.y + (0.85 * this.height));
+            }
         }
-        else{
-            c.font = "bold 45px Verdana";
-            c.fillText("Chase's Trash Adventure", window.innerWidth/2 , this.y + (0.25 * this.height));
-            c.fillStyle = '#e12417';
-            c.font = "bold 36px Verdana";
-            c.fillText("Click anywhere to play!", window.innerWidth/2 , this.y + this.height - 28);
+        else if (instructions === true){
+            c.fillStyle = "rgba(250,250,250,0.9";
+            this.image = c.fillRect(this.x, this.y, this.width, this.height);
+            c.strokeStyle = "rgba(20,20,20,0.9";
+            c.lineWidth   = 5;
+            c.strokeRect(this.x, this.y, this.width, this.height);
+            c.fillStyle = '#1a2537';
+            c.textAlign = 'center';
+            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                c.font = "bold 19px Verdana";
+                c.fillText("Today is your lucky day.. No one is looking, and the trash can is full!", window.innerWidth/2 , this.y + (0.1 * this.height));
+                c.fillText("It may be harder than you think to find the BEST trash can treats..", window.innerWidth/2 , this.y + (0.1 * this.height) + 50);
+                c.font = "normal 16px Verdana";
+                c.textAlign = 'left';
+                catFood.x = window.innerWidth/4 + 10; catFood.y = this.y + (0.15 * this.height) + 60; catFood.draw();
+                c.fillText("Old cat food cans are always delicious!", window.innerWidth/3 + 40 , this.y + (0.15 * this.height) + 85);
+                coca.x = window.innerWidth/7 - 13 ; coca.y = this.y + (0.15 * this.height) + 105; coca.draw();
+                c.fillText("They say dogs should't eat chocolate.. Whats the worst that can happen?", window.innerWidth/4 , this.y + (0.15 * this.height) + 165);
+                coffee.x = window.innerWidth/5; coffee.y = this.y + (0.15 * this.height) + 190; coffee.draw();
+                c.fillText("Feeling sluggish? Coffee can put some extra pep in your step!", window.innerWidth/3 - 30 , this.y + (0.15 * this.height) + 247);
+                c.fillStyle = '#e12417';
+                c.textAlign = 'center';
+                c.font = "bold 20px Verdana";
+                c.fillText("Continue!", this.x + this.width - 65 , this.y + this.height - 10);
+            }
+            else if (window.innerWidth < 945 || window.innerHeight < 550){
+                c.font = "bold 65px Verdana";
+                c.fillText("Enlarge", window.innerWidth/2 , this.y + (0.45 * this.height));
+                c.fillText("Your Screen!", window.innerWidth/2 , this.y + (0.45 * this.height) + 85);
+            }
+            else{
+                c.font = "bold 19px Verdana";
+                c.fillText("Today is your lucky day.. No one is looking, and the trash can is full!", window.innerWidth/2 , this.y + (0.1 * this.height));
+                c.fillText("It may be harder than you think to find the BEST trash can treats..", window.innerWidth/2 , this.y + (0.1 * this.height) + 50);
+                c.font = "normal 16px Verdana";
+                c.textAlign = 'left';
+                catFood.x = window.innerWidth/4 + 10; catFood.y = this.y + (0.15 * this.height) + 60; catFood.draw();
+                c.fillText("Old cat food cans are always delicious!", window.innerWidth/3 + 40 , this.y + (0.15 * this.height) + 85);
+                coca.x = window.innerWidth/7 - 13 ; coca.y = this.y + (0.15 * this.height) + 105; coca.draw();
+                c.fillText("They say dogs should't eat chocolate.. Whats the worst that can happen?", window.innerWidth/4 , this.y + (0.15 * this.height) + 165);
+                coffee.x = window.innerWidth/5; coffee.y = this.y + (0.15 * this.height) + 190; coffee.draw();
+                c.fillText("Feeling sluggish? Coffee can put some extra pep in your step!", window.innerWidth/3 - 30 , this.y + (0.15 * this.height) + 247);
+                c.fillStyle = '#e12417';
+                c.textAlign = 'center';
+                c.font = "bold 20px Verdana";
+                c.fillText("Continue!", this.x + this.width - 65 , this.y + this.height - 10);
+            }
         }
-
 
     };
     /*
@@ -231,7 +296,7 @@ function UI(x, y, dx, dy, width, height){
 
 
 
-var chase = new GamePiece('chase200.png', window.innerWidth/2 - 150, window.innerHeight - 165, 0, 0, 3);
+var chase = new GamePiece('chase200.png', window.innerWidth/2 - 150, window.innerHeight - 160, 0, 0, 3);
 var tampon = new GamePiece('tampon.png', -100, window.innerHeight - 90, 0, 0, 0);
 var coffee = new GamePiece('coffee.png', -100, window.innerHeight - 90, 0, 0, 0);
 var coca = new GamePiece('coca.png', -100, window.innerHeight - 90, 0, 0, 0);
@@ -321,7 +386,7 @@ function caughtObject(object){
 
 // Collision detection, then calls caughtObjects()
 function collision(object, callback) {
-    if (object.x >= chase.x  && object.x <= chase.x + chase.image.width) {
+    if (object.x >= chase.x  && object.x <= chase.x + chase.image.width - 45) {
         if (object.y < window.innerHeight - (object.image.height * 0.5) && object.y > window.innerHeight - object.image.height * 1.5) {
             caughtObject(object);
             callback();
@@ -337,7 +402,7 @@ function restart(){
         screen = 'game';
     }
     drop = false;
-    chase = new GamePiece('chase200.png', window.innerWidth/2 - 150, window.innerHeight - 165, 0, 0, 3);
+    chase = new GamePiece('chase200.png', window.innerWidth/2 - 150, window.innerHeight - 160, 0, 0, 3);
     tampon = new GamePiece('tampon.png', -100, window.innerHeight - 90, 0, 0, 0);
     coffee = new GamePiece('coffee.png', -100, window.innerHeight - 90, 0, 0, 0);
     coca = new GamePiece('coca.png', -100, window.innerHeight - 90, 0, 0, 0);
@@ -345,7 +410,7 @@ function restart(){
     speedup = new GamePiece('speedup2.png', -100, 0, 0, 0, 0);
     warn = new GamePiece('warn2.png', -100, 0, 0, 0, 0);
     yum = new GamePiece('yum3.png', -100, 0, 0, 0, 0);
-    scoreCard = new UI(-(window.innerWidth * 0.29), window.innerHeight * .015, 0, 0, window.innerWidth * 0.28, window.innerHeight * 0.15);
+    scoreCard = new UI(-(window.innerWidth * 0.29), window.innerHeight * .016, 0, 0, window.innerWidth * 0.28, window.innerHeight * 0.16);
     endGame = new UI(100, 100, 0, 0, window.innerWidth - 200, window.innerHeight - 200);
     start = new UI(100, 100, 0, 0, window.innerWidth - 200, window.innerHeight - 200);
 }
@@ -360,27 +425,66 @@ window.addEventListener('resize', function () {
 });
 
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    window.addEventListener('touchstart', function () {
-        start.dy = -3;
-        drop = true;
+    window.addEventListener('touchstart', function (e) {
+        if( /iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent) ) {
+            e.preventDefault();
+        }
+        if (screen === 'start' && instructions === false){
+            instructions = true;
+        }
+        else if (screen === 'start' && instructions === true) {
+            start.dy = -3;
+            drop = true;
+        }
+        if (screen === 'tampon' || screen === 'stomachAche'){
+            endGame.dy = -3;
+            drop = true;
+        }
+
     });
 }
 else{
     window.addEventListener('click', function (e) {
-        e.preventDefault();
-        start.dy = -3;
-        drop = true;
+        e.preventDefault(e);
+        if (screen === 'start' && instructions === false){
+            instructions = true;
+        }
+        else if (screen === 'start' && instructions === true) {
+            start.dy = -3;
+            drop = true;
+        }
+        if (screen === 'tampon' || screen === 'stomachAche'){
+            endGame.dy = -3;
+            drop = true;
+        }
+    });
+
+    window.addEventListener('keydown', function (event) {
+        if(event.keyCode === 32) {
+            event.preventDefault(event);
+            if (screen === 'start' && instructions === false){
+                instructions = true;
+            }
+            else if (screen === 'start' && instructions === true) {
+                start.dy = -3;
+                drop = true;
+            }
+            if (screen === 'tampon' || screen === 'stomachAche'){
+                endGame.dy = -3;
+                drop = true;
+            }
+        }
+
     });
 }
 
 
-window.removeEventListener('click', function () {
-
-});
-
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+
     window.addEventListener('touchstart', function (e) {
-        e.preventDefault();
+        if( /iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent) ) {
+            e.preventDefault();
+        }
         var x = e.changedTouches[0].pageX;
 
         if(x < window.innerWidth/2){
@@ -396,7 +500,6 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
         }
     });
     window.addEventListener('touchend', function (e) {
-        e.preventDefault();
         var x = e.changedTouches[0].pageX;
 
 
@@ -438,27 +541,6 @@ else{
     });
 }
 
-
-if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    window.addEventListener('touchstart', function () {
-        endGame.dy = -3;
-        drop = true;
-    });
-}
-else{
-    window.addEventListener('click', function (e) {
-        e.preventDefault();
-        endGame.dy = -3;
-        drop = true;
-    });
-}
-
-
-
-
-
-
-
 //////////////////////////////Game Loop/////////////////////////////////////
 
 function startMenu() {
@@ -470,8 +552,10 @@ function startMenu() {
         if (drop === false){
             start.drawStartMenu();
         }
-        if (drop === true){
-            start.fall();
+        if (instructions === true){
+            if (drop === true){
+                start.fall();
+            }
         }
         if (start.y > window.innerHeight * 1.5){
             screen = 'game';
