@@ -359,27 +359,103 @@ window.addEventListener('resize', function () {
     restart();
 });
 
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && screen === 'start') {
+    window.addEventListener('touchstart', function () {
+        start.dy = -3;
+        drop = true;
+    });
+}
+else{
+    window.addEventListener('click', function (e) {
+        e.preventDefault();
+        start.dy = -3;
+        drop = true;
+    });
+}
+
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && screen === 'game' ) {
+    window.addEventListener('touchstart', function (e) {
+        e.preventDefault();
+        var x = e.changedTouches[0].pageX;
+
+        if(x < window.innerWidth/2){
+            chase.dx = -chase.speed;
+
+        }
+        else if(x > window.innerWidth/2){
+            chase.dx = chase.speed;
+
+        }
+        else {
+            chase.dx = 0;
+        }
+    });
+
+
+    window.addEventListener('touchend', function (e) {
+        e.preventDefault();
+        var x = e.changedTouches[0].pageX;
+
+
+        if (x > window.innerWidth/2 && chase.dx === chase.speed) //Touch Right
+            chase.dx = 0;
+        if (x < window.innerWidth/2 && chase.dx === -chase.speed) //Touch Left
+            chase.dx = 0;
+        if (x < window.innerWidth/2 && chase.dx && chase.dx > 0) //Touch Left, Moving Right
+            chase.dx = chase.speed;
+        if (x < window.innerWidth/2 && chase.dx && chase.dx < 0) //Touch Right, Moving Left
+            chase.dx = -chase.speed;
+    });
+}
+else{
+    window.addEventListener('keydown', function (event) {
+
+        if(event.keyCode === 37){
+            chase.dx = -chase.speed;
+        }
+        else if(event.keyCode === 39){
+            chase.dx = chase.speed;
+        }
+        else {
+            chase.dx = 0;
+        }
+
+    });
+
+    window.addEventListener('keyup', function (event) {
+
+        if (event.keyCode === 39 && chase.dx < 0)
+            chase.dx = -chase.speed;
+        if (event.keyCode === 39 && chase.dx > 0)
+            chase.dx = 0;
+        if (event.keyCode === 37 && chase.dx < 0)
+            chase.dx = 0;
+        if (event.keyCode === 37 && chase.dx > 0)
+            chase.dx = chase.speed
+    });
+}
+
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && screen === 'tampon' ) {
+    window.addEventListener('touchstart', function () {
+        endGame.dy = -3;
+        drop = true;
+    });
+}
+else{
+    window.addEventListener('click', function (e) {
+        e.preventDefault();
+        endGame.dy = -3;
+        drop = true;
+    });
+}
+
+
 
 
 
 //////////////////////////////Game Loop/////////////////////////////////////
 
 function startMenu() {
-
-    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-        window.addEventListener('touchstart', function () {
-            start.dy = -3;
-            drop = true;
-        });
-    }
-    else{
-        window.addEventListener('click', function (e) {
-            e.preventDefault();
-            start.dy = -3;
-            drop = true;
-        });
-    }
-
 
     requestAnimationFrame(startMenu);
 
@@ -397,8 +473,6 @@ function startMenu() {
             gameLoop();
         }
     }
-
-
 
     if(screen === 'instructions'){
         c.clearRect(0, 0, window.innerWidth, window.innerHeight);
@@ -419,74 +493,6 @@ function startMenu() {
 function gameLoop() {
 
     if (screen === 'game'){
-
-        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-            window.addEventListener('touchstart', function (e) {
-                e.preventDefault();
-                var x = e.changedTouches[0].pageX;
-
-                if(x < window.innerWidth/2){
-                    chase.dx = -chase.speed;
-
-                }
-                else if(x > window.innerWidth/2){
-                    chase.dx = chase.speed;
-
-                }
-                else {
-                    chase.dx = 0;
-                }
-            });
-
-
-            window.addEventListener('touchend', function (e) {
-                e.preventDefault();
-                var x = e.changedTouches[0].pageX;
-
-
-                if (x > window.innerWidth/2 && chase.dx === chase.speed) //Touch Right
-                    chase.dx = 0;
-                if (x < window.innerWidth/2 && chase.dx === -chase.speed) //Touch Left
-                    chase.dx = 0;
-                if (x < window.innerWidth/2 && chase.dx && chase.dx > 0) //Touch Left, Moving Right
-                    chase.dx = chase.speed;
-                if (x < window.innerWidth/2 && chase.dx && chase.dx < 0) //Touch Right, Moving Left
-                    chase.dx = -chase.speed;
-            });
-        }
-        else{
-            window.addEventListener('keydown', function (event) {
-
-                if(event.keyCode === 37){
-                    chase.dx = -chase.speed;
-                }
-                else if(event.keyCode === 39){
-                    chase.dx = chase.speed;
-                }
-                else {
-                    chase.dx = 0;
-                }
-
-            });
-
-            window.addEventListener('keyup', function (event) {
-
-                if (event.keyCode === 39 && chase.dx < 0)
-                    chase.dx = -chase.speed;
-                if (event.keyCode === 39 && chase.dx > 0)
-                    chase.dx = 0;
-                if (event.keyCode === 37 && chase.dx < 0)
-                    chase.dx = 0;
-                if (event.keyCode === 37 && chase.dx > 0)
-                    chase.dx = chase.speed
-            });
-        }
-
-
-
-
-
-
 
         requestAnimationFrame(gameLoop);
         c.clearRect(0, 0, window.innerWidth, window.innerHeight);
@@ -515,22 +521,6 @@ function gameLoop() {
 }
 
 function tooMuchChocolate(){
-
-    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-        window.addEventListener('touchstart', function () {
-            endGame.dy = -3;
-            drop = true;
-        });
-    }
-    else{
-        window.addEventListener('click', function (e) {
-            e.preventDefault();
-            endGame.dy = -3;
-            drop = true;
-        });
-    }
-
-
 
     if (screen === 'tampon'){
         requestAnimationFrame(tooMuchChocolate);
