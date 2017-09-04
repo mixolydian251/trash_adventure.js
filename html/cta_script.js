@@ -359,7 +359,7 @@ window.addEventListener('resize', function () {
     restart();
 });
 
-if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && screen === 'start') {
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     window.addEventListener('touchstart', function () {
         start.dy = -3;
         drop = true;
@@ -373,7 +373,12 @@ else{
     });
 }
 
-if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && screen === 'game' ) {
+
+window.removeEventListener('click', function () {
+
+});
+
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     window.addEventListener('touchstart', function (e) {
         e.preventDefault();
         var x = e.changedTouches[0].pageX;
@@ -390,8 +395,6 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
             chase.dx = 0;
         }
     });
-
-
     window.addEventListener('touchend', function (e) {
         e.preventDefault();
         var x = e.changedTouches[0].pageX;
@@ -435,7 +438,8 @@ else{
     });
 }
 
-if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && screen === 'tampon' ) {
+
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     window.addEventListener('touchstart', function () {
         endGame.dy = -3;
         drop = true;
@@ -448,6 +452,8 @@ else{
         drop = true;
     });
 }
+
+
 
 
 
