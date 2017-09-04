@@ -105,8 +105,8 @@ function UI(x, y, dx, dy, width, height){
             c.shadowColor = '#7e7e7e';
             c.fillStyle = '#e84544';
         }
-        c.fillText("Stomach: " + acheText[ache], this.x + (0.1 *this.width), this.y + (0.75 *this.height), this.width)
-
+        c.fillText("Stomach: " + acheText[ache], this.x + (0.1 *this.width), this.y + (0.75 *this.height), this.width);
+        c.shadowBlur = 0;
 
     };
 
@@ -138,13 +138,13 @@ function UI(x, y, dx, dy, width, height){
         else if(window.innerWidth > 400){
             c.font = "normal 16px Verdana";
         }
-        c.fillText("now you don't feel so good...", window.innerWidth/2 , this.y + (0.3 *this.height) + 35);
-        c.fillText("Oh No!! It seems you have pooped on the rug!", window.innerWidth/2 , this.y + (0.3 *this.height) + 70);
+        c.fillText("You don't feel so good...", window.innerWidth/2 , this.y + (0.3 *this.height) + 40);
+        c.fillText("Oh No!! It seems you have POOPED on the rug!", window.innerWidth/2 , this.y + (0.3 *this.height) + 75);
         c.font = "bold 46px Verdana";
         if (this.finalScore < score){
             this.finalScore += 10;
         }
-        c.fillText("Final Score: " + this.finalScore, window.innerWidth/2 , this.y + (0.65 *this.height) );
+        c.fillText("Final Score: " + this.finalScore, window.innerWidth/2 , this.y + (0.72 *this.height) );
         c.fillStyle = '#e12417';
         c.font = "bold 36px Verdana";
         c.fillText("Click anywhere to play again!", window.innerWidth/2 , this.y + this.height - 28);
@@ -158,16 +158,24 @@ function UI(x, y, dx, dy, width, height){
         c.strokeStyle = "rgba(20,20,20,0.9";
         c.lineWidth   = 5;
         c.strokeRect(this.x, this.y, this.width, this.height);
-        c.fillStyle = "rgba(20,20,20,1";
+        c.fillStyle = '#1a2537';
         c.textAlign = 'center';
-        c.font = "bold 46px Verdana";
-        c.fillText("Chase's Trash Adventure", window.innerWidth/2 , this.y + (0.15 * this.height));
-        c.fillStyle = '#e12417';
-        c.font = "bold 36px Verdana";
-        c.fillText("Click anywhere to play!", window.innerWidth/2 , this.y + this.height - 28);
+        c.font = "bold 70px Verdana";
+        if(window.innerHeight > window.innerWidth){
+            c.fillText("Rotate Your", window.innerWidth/2 , this.y + (0.45 * this.height));
+            c.fillText("Phone Sideways!", window.innerWidth/2 , this.y + (0.45 * this.height) + 85);
+        }
+        else{
+            c.font = "bold 45px Verdana";
+            c.fillText("Chase's Trash Adventure", window.innerWidth/2 , this.y + (0.25 * this.height));
+            c.fillStyle = '#e12417';
+            c.font = "bold 36px Verdana";
+            c.fillText("Click anywhere to play!", window.innerWidth/2 , this.y + this.height - 28);
+        }
+
 
     };
-
+    /*
     this.drawInstruct = function () {
         c.fillStyle = "rgba(250,250,250,0.9";
         this.image = c.fillRect(this.x, this.y, this.width, this.height);
@@ -183,6 +191,7 @@ function UI(x, y, dx, dy, width, height){
         c.fillText("OK, Got It!", window.innerWidth/2 , this.y + this.height - 28);
 
     };
+    */
 
 
 
@@ -324,7 +333,9 @@ function restart(){
     gravity = 9.8;
     score = 0;
     ache = 3;
-    screen = 'game';
+    if (screen !== 'start'){
+        screen = 'game';
+    }
     drop = false;
     chase = new GamePiece('chase200.png', window.innerWidth/2 - 150, window.innerHeight - 165, 0, 0, 3);
     tampon = new GamePiece('tampon.png', -100, window.innerHeight - 90, 0, 0, 0);
@@ -334,7 +345,7 @@ function restart(){
     speedup = new GamePiece('speedup2.png', -100, 0, 0, 0, 0);
     warn = new GamePiece('warn2.png', -100, 0, 0, 0, 0);
     yum = new GamePiece('yum3.png', -100, 0, 0, 0, 0);
-    scoreCard = new UI(-(window.innerWidth * 0.26), window.innerHeight * .015, 0, 0, window.innerWidth * 0.25, window.innerHeight * 0.15);
+    scoreCard = new UI(-(window.innerWidth * 0.29), window.innerHeight * .015, 0, 0, window.innerWidth * 0.28, window.innerHeight * 0.15);
     endGame = new UI(100, 100, 0, 0, window.innerWidth - 200, window.innerHeight - 200);
     start = new UI(100, 100, 0, 0, window.innerWidth - 200, window.innerHeight - 200);
 }
@@ -381,6 +392,7 @@ function startMenu() {
             start.fall();
         }
         if (start.y > window.innerHeight * 1.5){
+            screen = 'game';
             restart();
             gameLoop();
         }
