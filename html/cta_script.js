@@ -9,6 +9,8 @@ var drop = false;
 var instructions = false;
 
 var fart1 = document.getElementById('fart1');
+var music = document.getElementById('thememusic');
+music.loop = true;
 /////////////////////////////Object////////////////////////////////////
 
 function GamePiece(imageName, x, y, dx, dy, speed){
@@ -314,10 +316,6 @@ var start = new UI(100, 100, 0, 0, window.innerWidth - 200, window.innerHeight -
 /////////////////////////////Functions/////////////////////////////////////////////
 
 function create() {
-    var music = document.getElementById('thememusic');
-    music.loop = true;
-    music.play();
-    music.volume = 0.4;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -350,6 +348,12 @@ function caughtObject(object){
         speedup.dy = -1;
     }
     if(object===coca){
+        if (chase.speed <= 3){
+            chase.speed -= 1;
+        }
+        else{
+            chase.speed = chase.speed/2 ;
+        }
         ache -= 1;
         var burp = document.getElementById('burp');
         burp.play();
@@ -419,6 +423,10 @@ function restart(){
 ///////////////////////////////Event Listeners/////////////////////////////////////
 
 window.addEventListener('resize', function () {
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        music.pause();
+        music.currentTime = 0;
+    }
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     restart();
@@ -431,6 +439,7 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
         }
         if (screen === 'start' && instructions === false){
             instructions = true;
+            music.play();
         }
         else if (screen === 'start' && instructions === true) {
             start.dy = -3;
@@ -448,6 +457,7 @@ else{
         e.preventDefault(e);
         if (screen === 'start' && instructions === false){
             instructions = true;
+            music.play();
         }
         else if (screen === 'start' && instructions === true) {
             start.dy = -3;
