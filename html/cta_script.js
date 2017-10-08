@@ -440,6 +440,7 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
         if (screen === 'start' && instructions === false){
             instructions = true;
             music.play();
+            music.volume = 0.6;
         }
         else if (screen === 'start' && instructions === true) {
             start.dy = -3;
@@ -458,6 +459,7 @@ else{
         if (screen === 'start' && instructions === false){
             instructions = true;
             music.play();
+            music.volume = 0.3;
         }
         else if (screen === 'start' && instructions === true) {
             start.dy = -3;
